@@ -22,16 +22,20 @@ module ForemanConcrete
     end
 
     initializer 'foreman_concrete.configure_sentry', after: :load_environment_config do
-      require 'foreman_concrete/configure_sentry'
+      require 'foreman_concrete/configure_sentry' if begin
+                                                       Setting.table_exists?
+                                                     rescue StandardError
+                                                       false
+                                                     end
     end
 
     # Include concerns in this config.to_prepare block
     config.to_prepare do
       begin
-        Foreman::Exception.send(:include, ForemanConcrete::Extensions::Foreman::Exception)
-        Foreman::LoggingImpl.send(:include, ForemanConcrete::Extensions::Foreman::Logging)
-        ApplicationController.send(:include, ForemanConcrete::ApplicationControllerExtensions)
-        Api::BaseController.send(:include, ForemanConcrete::Api::BaseControllerExtensions)
+        ::Foreman::Exception.send(:include, ForemanConcrete::Extensions::Foreman::Exception)
+        ::Foreman::LoggingImpl.send(:include, ForemanConcrete::Extensions::Foreman::Logging)
+        ::ApplicationController.send(:include, ForemanConcrete::ApplicationControllerExtensions)
+        ::Api::BaseController.send(:include, ForemanConcrete::Api::BaseControllerExtensions)
       rescue StandardError => e
         Raven.capture_exception(e)
         Rails.logger.warn "ForemanConcrete: skipping engine hook (#{e})"
