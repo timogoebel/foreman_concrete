@@ -8,4 +8,5 @@ require 'raven/breadcrumbs/logger'
   config.dsn = Setting[:sentry_dsn]
   config.release = SETTINGS[:version].version
   config.rails_activesupport_breadcrumbs = true
+  config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
 end

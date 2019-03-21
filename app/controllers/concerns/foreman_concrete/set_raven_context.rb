@@ -17,6 +17,8 @@ module ForemanConcrete
         email: User.current&.mail
       )
       Raven.extra_context(
+        params: params.to_unsafe_h,
+        url: request.url,
         request_id: request.uuid
       )
     end
