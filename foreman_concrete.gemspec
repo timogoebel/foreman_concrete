@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir['{app,lib}/**/*'] + ['LICENSE', 'Rakefile', 'README.md']
 
-  s.add_runtime_dependency 'sentry-raven', '~> 2.7'
+  s.add_runtime_dependency 'sentry-raven', '>= 2.7', '< 4'
 
   s.add_development_dependency 'rdoc'
   s.add_development_dependency 'rubocop'
